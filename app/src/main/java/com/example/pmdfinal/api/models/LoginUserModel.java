@@ -1,0 +1,20 @@
+package com.example.pmdfinal.api.models;
+
+public class LoginUserModel {
+
+    private String email;
+    private String password;
+
+    public LoginUserModel(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+}
