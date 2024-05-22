@@ -1,4 +1,4 @@
-package com.example.pmdfinal.auth.utils;
+package com.example.pmdfinal.activities.auth.utils;
 
 import android.util.Patterns;
 import java.util.regex.Matcher;

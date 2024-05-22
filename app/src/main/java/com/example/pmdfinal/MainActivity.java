@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.pmdfinal.auth.SignupActivity;
+import com.example.pmdfinal.activities.auth.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
 

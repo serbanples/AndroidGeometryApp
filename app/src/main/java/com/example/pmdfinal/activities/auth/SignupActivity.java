@@ -1,4 +1,4 @@
-package com.example.pmdfinal.auth;
+package com.example.pmdfinal.activities.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pmdfinal.R;
+import com.example.pmdfinal.activities.auth.utils.ValidAuth;
+import com.example.pmdfinal.activities.root.HomeActivity;
 import com.example.pmdfinal.api.clients.UserClient;
 import com.example.pmdfinal.api.models.RegisterUserModel;
 import com.example.pmdfinal.api.services.UserService;
-
-import static com.example.pmdfinal.auth.utils.ValidAuth.*;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,8 +27,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
-    private Button signUpButton;
-    private TextView sendToLoginTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +37,8 @@ public class SignupActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
-        signUpButton = findViewById(R.id.signUpButton);
-        sendToLoginTextView = findViewById(R.id.sendtoLoginTextView);
+        Button signUpButton = findViewById(R.id.signUpButton);
+        TextView sendToLoginTextView = findViewById(R.id.sendtoLoginTextView);
 
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +52,9 @@ public class SignupActivity extends AppCompatActivity {
                 if(validateInput(username, email, password, confirmPassword)) {
                     RegisterUserModel newUser = new RegisterUserModel(username, email, password);
                     registerUser(newUser);
+                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -73,15 +74,15 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!isValidEmail(email)) {
+        if (!ValidAuth.isValidEmail(email)) {
             emailEditText.setError("Invalid Email address.");
             return false;
         }
-        if (!isValidPassword(password)) {
+        if (!ValidAuth.isValidPassword(password)) {
             passwordEditText.setError("Password must be at least 8 characters long and include a number, an uppercase letter, a lowercase letter, and a special character");
             return false;
         }
-        if (!passwordMatch(password, confirmPassword)) {
+        if (!ValidAuth.passwordMatch(password, confirmPassword)) {
             confirmPasswordEditText.setError("Passwords do not match");
             return false;
         }
@@ -95,7 +96,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this, "Registration successfull", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(SignupActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                 }

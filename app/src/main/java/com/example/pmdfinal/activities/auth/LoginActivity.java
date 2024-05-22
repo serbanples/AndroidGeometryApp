@@ -1,4 +1,4 @@
-package com.example.pmdfinal.auth;
+package com.example.pmdfinal.activities.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pmdfinal.R;
+import com.example.pmdfinal.activities.root.HomeActivity;
 import com.example.pmdfinal.api.clients.UserClient;
 import com.example.pmdfinal.api.models.LoginUserModel;
-import com.example.pmdfinal.api.models.RegisterUserModel;
 import com.example.pmdfinal.api.services.UserService;
 
 import retrofit2.Call;
@@ -24,8 +24,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
-    private Button loginButton;
-    private TextView sendToSignupTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        loginButton = findViewById(R.id.loginButton);
-        sendToSignupTextView = findViewById(R.id.sendToSignupTextView);
+        Button loginButton = findViewById(R.id.loginButton);
+        TextView sendToSignupTextView = findViewById(R.id.sendToSignupTextView);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (!email.isEmpty() && !password.isEmpty()) {
                     LoginUserModel newUser = new LoginUserModel(email, password);
                     loginUser(newUser);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
                 }
