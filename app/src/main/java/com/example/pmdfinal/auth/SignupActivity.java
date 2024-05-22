@@ -1,9 +1,11 @@
 package com.example.pmdfinal.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
     private Button signUpButton;
+    private TextView sendToLoginTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
         signUpButton = findViewById(R.id.signUpButton);
+        sendToLoginTextView = findViewById(R.id.sendtoLoginTextView);
+
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +57,15 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
+
+        sendToLoginTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private boolean validateInput(String username, String email, String password, String confirmPassword) {
