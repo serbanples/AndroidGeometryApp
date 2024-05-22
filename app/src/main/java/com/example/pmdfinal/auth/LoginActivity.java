@@ -24,8 +24,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
-    private Button loginButton;
-    private TextView sendToSignupTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        loginButton = findViewById(R.id.loginButton);
-        sendToSignupTextView = findViewById(R.id.sendToSignupTextView);
+        Button loginButton = findViewById(R.id.loginButton);
+        TextView sendToSignupTextView = findViewById(R.id.sendToSignupTextView);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
