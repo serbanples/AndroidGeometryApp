@@ -1,6 +1,7 @@
 package com.example.pmdfinal.activities.auth;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,23 +13,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pmdfinal.R;
 import com.example.pmdfinal.activities.root.HomeActivity;
-import com.example.pmdfinal.api.clients.UserClient;
-import com.example.pmdfinal.api.models.LoginUserModel;
-import com.example.pmdfinal.api.services.UserService;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.pmdfinal.utils.DatabaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
+    private DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        myDb = new DatabaseHelper(this); // Initialize DatabaseHelper
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -42,11 +40,29 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
 
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    LoginUserModel newUser = new LoginUserModel(email, password);
-                    loginUser(newUser);
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                    Cursor res = myDb.getUserByUsername(email);
+                    if (res.getCount() == 0) {
+                        Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    res.moveToFirst();
+                    int usernameIndex = res.getColumnIndex("USERNAME");
+                    int passwordIndex = res.getColumnIndex("PASSWORD");
+                    if(passwordIndex != -1) {
+                        String storedUsername = res.getString(usernameIndex);
+                        String storedPassword = res.getString(passwordIndex);
+                        if (password.equals(storedPassword)) {
+                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("USERNAME", storedUsername);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Error: Unable to retrieve password", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
                 }
@@ -61,25 +77,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void loginUser(LoginUserModel newUser) {
-        UserService userService = UserClient.getRetrofitInstance().create(UserService.class);
-        Call<Void> call = userService.loginUser(newUser);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 }

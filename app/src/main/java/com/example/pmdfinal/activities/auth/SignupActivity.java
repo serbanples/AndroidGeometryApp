@@ -13,16 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pmdfinal.R;
 import com.example.pmdfinal.activities.auth.utils.ValidAuth;
 import com.example.pmdfinal.activities.root.HomeActivity;
-import com.example.pmdfinal.api.clients.UserClient;
-import com.example.pmdfinal.api.models.RegisterUserModel;
-import com.example.pmdfinal.api.services.UserService;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.pmdfinal.utils.DatabaseHelper;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private DatabaseHelper myDb;
     private EditText usernameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -32,6 +27,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        myDb = new DatabaseHelper(this);
 
         usernameEditText = findViewById(R.id.usernameEditText);
         emailEditText = findViewById(R.id.emailEditText);
@@ -49,12 +46,17 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if(validateInput(username, email, password, confirmPassword)) {
-                    RegisterUserModel newUser = new RegisterUserModel(username, email, password);
-                    registerUser(newUser);
-                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (validateInput(username, email, password, confirmPassword)) {
+                    boolean isInserted = myDb.insertData(username, email, password);
+                    if (isInserted) {
+                        Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                        intent.putExtra("USERNAME", username);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(SignupActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -87,26 +89,6 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private void registerUser(RegisterUserModel newUser) {
-        UserService userService = UserClient.getRetrofitInstance().create(UserService.class);
-        Call<Void> call = userService.registerUser(newUser);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SignupActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 }
