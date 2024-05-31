@@ -1,12 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Theory Page" />
-</LinearLayout>
+        android:orientation="vertical">
+
+        <!-- Square -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+<!--            <ImageView-->
+<!--                android:id="@+id/squareImageView"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:src="@drawable/square" />-->
+            <TextView
+                android:id="@+id/squareTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Square\n\nArea: side^2\nPerimeter: 4 * side\n\nExample: side = 4\nArea: 16\nPerimeter: 16" />
+        </LinearLayout>
+
+        <!-- Rectangle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+<!--            <ImageView-->
+<!--                android:id="@+id/rectangleImageView"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:src="@drawable/rectangle" />-->
+            <TextView
+                android:id="@+id/rectangleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rectangle\n\nArea: width * height\nPerimeter: 2 * (width + height)\n\nExample: width = 5, height = 3\nArea: 15\nPerimeter: 16" />
+        </LinearLayout>
+
+        <!-- Triangle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+<!--            <ImageView-->
+<!--                android:id="@+id/triangleImageView"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:src="@drawable/triangle" />-->
+            <TextView
+                android:id="@+id/triangleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Triangle\n\nArea: 0.5 * base * height\nPerimeter: side1 + side2 + side3\n\nExample: base = 4, height = 3, sides = 3, 4, 5\nArea: 6\nPerimeter: 12" />
+        </LinearLayout>
+
+        <!-- Circle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+            <ImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/circle" />
+            <TextView
+                android:id="@+id/circleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Circle\n\nArea: π * radius^2\nPerimeter (Circumference): 2 * π * radius\n\nExample: radius = 3\nArea: 28.27\nPerimeter: 18.85" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
